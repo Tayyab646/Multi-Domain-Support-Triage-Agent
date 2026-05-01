@@ -28,6 +28,60 @@ If the ticket clears the safety checks and relevant documentation is found, the 
 
 ---
 
+## ⚙️ Complete Setup Guide
+
+Follow these steps to get the agent running on your local machine.
+
+### 1. Environment Setup
+It is highly recommended to use a virtual environment to keep your dependencies isolated. Open your terminal, navigate to the root of the project folder, and run:
+
+**For Windows:**
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+**For Mac/Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+*(You will know it is activated when you see `(venv)` at the start of your terminal prompt).*
+
+### 2. Generate and Configure Your API Key
+This agent uses the Anthropic Claude API to power its reasoning and routing.
+1. Go to the [Anthropic Console](https://console.anthropic.com/).
+2. Sign in or create an account.
+3. Navigate to **API Keys** and click **Create Key**.
+4. In the root directory of this project (outside the `code/` folder), create a new file named `.env`.
+5. Add your newly generated key to the `.env` file like this:
+   ```env
+   ANTHROPIC_API_KEY=sk-ant-api03-your_actual_api_key_here
+   ```
+*(Note: The `.env` file is included in the `.gitignore` so your key will remain secure and will not be uploaded to GitHub).*
+
+### 3. Install Dependencies
+With your virtual environment activated, install the required Python packages (Anthropic, pandas, rank_bm25, and python-dotenv) by running:
+```bash
+pip install -r code/requirements.txt
+```
+
+### 4. Running the Agent
+Once your environment is set up and your API key is in place, you can execute the orchestrator. Make sure you are in the root directory of the project, then run:
+```bash
+python code/main.py
+```
+
+### 5. How It Gives Output
+When you run the script, the agent will:
+1. Load all the `.mdux` and `.md` files from the `data/` folder to build its knowledge base.
+2. Read the incoming tickets from `support_tickets/support_tickets.csv` (and `support_tickets/samples.csv` if testing).
+3. Process each ticket one by one (classifying, checking safety rules, and retrieving context).
+4. **Generate the Output:** The final results are automatically saved into a new file located at `support_tickets/output.csv`. 
+
+You can open `output.csv` to see the agent's final decisions, including the `status` (escalated or replied), `product_area`, the generated `response`, and the `justification` for its actions.
+```
+
 ## 📂 Repository Structure
 ```text
 hackerrank-orchestrate-may26-main/
